@@ -1,9 +1,28 @@
 import Layout from '../components/layout/Layout';
 
+
 const RecipePage = () => (
   <Layout>
-    <h1>레시피 페이지</h1>
+    <div >
+      <button type='button'>뒤로가기</button>
+      <h1>레시피 페이지</h1>
+    </div>
     <p>레시피 목록 확인 가능</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   </Layout>
 );
 

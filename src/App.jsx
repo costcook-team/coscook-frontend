@@ -34,6 +34,7 @@ import Activities from './pages/Activities';
 import ProfileUpdate from './pages/ProfileUpdate';
 import Review from './pages/Review';
 import SignUpComplete from './pages/SignUpComplete';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   const location = useLocation();
@@ -45,7 +46,10 @@ function App() {
       <GlobalStyle /> {/* 전역 스타일 적용 */}
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
-          {/* 비회원, 로그인한 회원 모두 접근 가능 */}
+          {/* 공용 라우트 */}
+          <Route path="/" element={<PreLoginPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/oauth/:provider" element={<OAuthVerification />} />
           <Route
             path="/home"
             element={
@@ -86,78 +90,85 @@ function App() {
               </PageTransition>
             }
           />
-
-          {/* 비회원만 접근 가능 */}
-          <Route
-            path="/"
-            element={
-              <PageTransition>
-                <PreLoginPage />
-              </PageTransition>
-            }
-          />
-          <Route
-            path="/login"
-            element={
-              <PageTransition>
-                <LoginPage />
-              </PageTransition>
-            }
-          />
-          <Route
-            path="/oauth/:provider"
-            element={
-              <AuthProvider>
-                <OAuthVerification />
-              </AuthProvider>
-            }
-          />
-
-          {/* 로그인한 회원만 접근 가능 */}
-          <Route path="/profile/update" element={<ProfileUpdate />} />
-          <Route path="/signup/complete" element={<SignUpComplete />} />
+          {/* 인증된 사용자 전용 보호된 라우트 */}
           <Route
             path="/budget"
             element={
-              <PageTransition>
-                <BudgetPage />
-              </PageTransition>
+              <ProtectedRoute
+                element={
+                  <PageTransition>
+                    <BudgetPage />
+                  </PageTransition>
+                }
+              />
             }
           />
           <Route
             path="/my"
             element={
-              <PageTransition>
-                <MyPage />
-              </PageTransition>
+              <ProtectedRoute
+                element={
+                  <PageTransition>
+                    <MyPage />
+                  </PageTransition>
+                }
+              />
             }
           />
-          <Route path="/my/profile" element={<UserInfo />} />
+          <Route
+            path="/my/profile"
+            element={<ProtectedRoute element={<UserInfo />} />}
+          />
           <Route
             path="/recommend"
             element={
-              <PageTransition>
-                <RecommendPage />
-              </PageTransition>
+              <ProtectedRoute
+                element={
+                  <PageTransition>
+                    <RecommendPage />
+                  </PageTransition>
+                }
+              />
             }
           />
           <Route
             path="/activities"
             element={
-              <PageTransition>
-                <Activities />
-              </PageTransition>
+              <ProtectedRoute
+                element={
+                  <PageTransition>
+                    <Activities />
+                  </PageTransition>
+                }
+              />
             }
           />
-
-          {/* 관리자만 접근 가능 */}
-          <Route path="/admin/ingredient" element={<AdminIngredientPage />} />
-          <Route path="/admin/recipe" element={<AdminRecipePage />} />
+          <Route
+            path="/signup/complete"
+            element={<ProtectedRoute element={<SignUpComplete />} />}
+          />
+          <Route
+            path="/profile/update"
+            element={<ProtectedRoute element={<ProfileUpdate />} />}
+          />
+          {/* 관리자 전용 보호된 라우트 */}
+          <Route
+            path="/admin/ingredient"
+            element={
+              <ProtectedRoute element={<AdminIngredientPage />} isAdmin />
+            }
+          />
+          <Route
+            path="/admin/recipe"
+            element={<ProtectedRoute element={<AdminRecipePage />} isAdmin />}
+          />
           <Route
             path="/admin/recipeIngredient"
-            element={<RecipeIngredientPage />}
+            element={
+              <ProtectedRoute element={<RecipeIngredientPage />} isAdmin />
+            }
           />
-          {/* 아직 명확하지 않은 페이지 */}
+          {/* 추가 공용 라우트 */}
           <Route
             path="/list"
             element={
@@ -174,8 +185,8 @@ function App() {
               </PageTransition>
             }
           />
-          {/* 에러 페이지 */}
-          <Route path="*" element={<NotFoundPage />} />
+          {/* 찾을 수 없는 페이지 */}
+          <Route path="*" element={<NotFoundPage />} /> {/* 404 페이지 */}
         </Routes>
       </AnimatePresence>
     </AuthProvider>

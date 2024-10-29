@@ -7,19 +7,19 @@ import PersonIcon from '@mui/icons-material/Person'; // 사람 아이콘
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import LoginModal from '../common/LoginModal';
+import { useAuth } from '../../context/Auth/AuthContext';
 
 const Footer = () => {
+  const { state } = useAuth();
+  const { isAuthenticated } = state;
   const navigate = useNavigate(); // 페이지 전환을 위한 navigate 함수
   const location = useLocation(); // 현재 경로 정보를 가져옴
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
 
   // 경로를 변경하는 핸들러 함수
   const handleNavigate = (path) => {
-    if (path === '/my') {
-      // 로그인 여부 체크 (예시)
-      const isLoggedIn = false; // 실제 로그인 상태에 맞게 수정
-
-      if (!isLoggedIn) {
+    if (path === '/my' || path === '/budget') {
+      if (!isAuthenticated) {
         setIsModalOpen(true); // 모달 열기
       } else {
         navigate(path); // 로그인 되어 있으면 이동

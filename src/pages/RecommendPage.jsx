@@ -303,7 +303,7 @@ const SelectedImage = styled.img`
   width: 100px;
   object-fit: cover;
 
-  min-width: 100%;
+  min-width: 100px;
 `;
 const SelectedText = styled.div`
   height: 20px;

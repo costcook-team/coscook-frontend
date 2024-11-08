@@ -17,8 +17,6 @@ const BudgetPage = () => {
   const [budgetAmount, setBudgetAmount] = useState(0); // 설정한 예산
   const [useAmount, setUseAmount] = useState(0); // 사용한 예산
   const [remainingBudget, setRemainingBudget] = useState(0); // 남은 예산
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [firstSundayDateString, setFirstSundayDateString] = useState('');
   const [recipes, setRecipes] = useState([]);
   const [highestPrice, setHighestPrice] = useState(0); // 가장 비싼 레시피 가격
   const [lowestPrice, setLowestPrice] = useState(0); // 가장 저렴한 레시피 가격
@@ -33,6 +31,7 @@ const BudgetPage = () => {
   const {
     year,
     week,
+    currentDate,
     currentMonth,
     weekNumber,
     isCurrentWeek,
@@ -175,7 +174,7 @@ const BudgetPage = () => {
         </BudgetSettingContainer>
       </BudgetContainer>
       <CalendarContainer onClick={handleCalendarClick}>
-        <WeeklyCalendar currentDate={currentDate}>달력</WeeklyCalendar>
+        <WeeklyCalendar currentDate={currentDate} />
       </CalendarContainer>
 
       {/* 달력 클릭 모달 */}

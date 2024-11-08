@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import moment from 'moment/moment';
+import moment from 'moment';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; // 캘린더 기본 스타일 적용
 import styled from 'styled-components';
@@ -9,24 +9,10 @@ const WeeklyCalendar = ({ currentDate }) => {
   const [dates, setDates] = useState([currentDate]);
 
   useEffect(() => {
-    const selectedDates = [];
-
-    if (currentDate.getDay() === 0) {
-      selectedDates.push(
-        moment(currentDate).toDate(), // 일요일
-        moment(currentDate).add(6, 'days').toDate() // 월요일
-      );
-    } else {
-      // 일요일이 아닌 경우
-      selectedDates.push(
-        moment(currentDate).subtract(currentDate.getDay(), 'days').toDate(), // 주의 첫 날 (일요일)
-        moment(currentDate)
-          .add(6 - currentDate.getDay(), 'days')
-          .toDate() // 주의 마지막 날 (토요일)
-      );
-    }
-
-    setDates(selectedDates); // 주 전체 날짜 설정
+    // 시작 요일과 끝 요일
+    const startOfWeek = moment(currentDate).startOf('week'); // 일요일 기준
+    const endOfWeek = moment(currentDate).endOf('week'); // 토요일 기준
+    setDates([startOfWeek.toDate(), endOfWeek.toDate()]); // 날짜 배열 설정
   }, [currentDate]);
 
   const tileClassName = ({ date }) => {
